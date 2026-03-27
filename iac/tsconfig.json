@@ -1,12 +1,17 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "CommonJS",
-    "declaration": true,
-    "outDir": "./",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "lib": ["ES2020"],
+    "declaration": false,
     "strict": true,
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "resolveJsonModule": true,
+    "outDir": ".",
+    "rootDir": ".",
+    "types": ["node"]
   },
-  "include": ["**/*.ts"]
+  "include": ["main.ts", "lib/**/*.ts"],
+  "exclude": ["node_modules", ".gen", "cdktf.out"]
 }

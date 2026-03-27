@@ -48,6 +48,11 @@ jobs:
           push: true
           tags: ${{ env.ECR_URI }}:latest
 
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+            terraform_version: 1.6.6
+
       - name: CDKTF deploy (install deps, synth & deploy)
         working-directory: iac
         env:
