@@ -51,11 +51,12 @@ jobs:
       - name: CDKTF deploy (install deps, synth & deploy)
         working-directory: iac
         env:
-          IMAGE_URI: ${{ env.ECR_URI }}:latest
-          AWS_REGION: ${{ env.AWS_REGION }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            IMAGE_URI: ${{ env.ECR_URI }}:latest
+            AWS_REGION: ${{ env.AWS_REGION }}
+            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
-          npm ci
-          npx cdktf deploy --auto-approve
-#
+            npm ci
+            npx cdktf get
+            npx cdktf deploy --auto-approve
+        #

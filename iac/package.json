@@ -2,20 +2,20 @@
   "name": "tv-devops-assessment-iac",
   "version": "1.0.0",
   "private": true,
-  "main": "main.js",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "tsc",
     "synth": "cdktf synth",
-    "deploy": "cdktf deploy --auto-approve",
-    "destroy": "cdktf destroy --auto-approve"
+    "deploy": "cdktf deploy",
+    "destroy": "cdktf destroy"
   },
   "dependencies": {
-    "cdktf": "^0.16.0",
-    "constructs": "^10.0.0",
-    "@cdktf/provider-aws": "^5.0.0"
+    "cdktf": "^0.16.3",
+    "constructs": "^10.3.0",
+    "@cdktf/provider-aws": "^16.0.0"
   },
   "devDependencies": {
-    "typescript": "^5.0.0",
+    "typescript": "^5.4.0",
+    "ts-node": "^10.9.2",
     "@types/node": "^20.0.0"
   }
 }
