@@ -4,5 +4,6 @@
   "terraformProviders": [
     "hashicorp/aws@~> 4.0"
   ],
-  "codeMakerOutput": "imports"
+  "codeMakerOutput": "imports",
+  "projectId": "cae16299-0d47-4320-a1db-e399fa7e65bf"
 }

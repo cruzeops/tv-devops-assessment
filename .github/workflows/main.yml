@@ -57,6 +57,6 @@ jobs:
             AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
             npm ci
-            npx cdktf get
+            npm install -g cdktf-cli@0.17.3
             npx cdktf deploy --auto-approve
         #

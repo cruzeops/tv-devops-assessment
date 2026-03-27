@@ -7,4 +7,3 @@ npm-debug.log
 .git
 **/__tests__
 coverage
-"package-lock.json"
