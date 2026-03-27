@@ -1,0 +1,60 @@
+name: CI — Build, Push & Deploy
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: {}
+
+jobs:
+  build-and-deploy:
+    name: Build image, push to ECR, and deploy with CDKTF
+    runs-on: ubuntu-latest
+    env:
+      # default app name (override by setting repository secret APP_NAME)
+      APP_NAME: express-ts-app
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Ensure ECR repository exists
+        run: |
+          ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+          ECR_URI=${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${APP_NAME}
+          echo "ECR_URI=$ECR_URI" >> $GITHUB_ENV
+          aws ecr describe-repositories --repository-names "${APP_NAME}" --region ${AWS_REGION} || \
+            aws ecr create-repository --repository-name "${APP_NAME}" --region ${AWS_REGION}
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build and push Docker image to ECR
+        uses: docker/build-push-action@v4
+        with:
+          context: ./app
+          push: true
+          tags: ${{ env.ECR_URI }}:latest
+
+      - name: CDKTF deploy (install deps, synth & deploy)
+        working-directory: iac
+        env:
+          IMAGE_URI: ${{ env.ECR_URI }}:latest
+          AWS_REGION: ${{ env.AWS_REGION }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          npm ci
+          npx cdktf deploy --auto-approve
