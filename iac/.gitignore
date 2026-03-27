@@ -1,0 +1,9 @@
+node_modules
+.terraform
+cdktf.out
+cdktf.context.json
+*.tfstate
+*.tfstate.backup
+dist
+npm-debug.log
+.env

@@ -1,0 +1,8 @@
+{
+  "language": "typescript",
+  "app": "npm run build && node main.js",
+  "terraformProviders": [
+    "hashicorp/aws@~> 4.0"
+  ],
+  "codeMakerOutput": "imports"
+}

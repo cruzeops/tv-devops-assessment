@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # 🚀 DevOps Assessment – Full Lifecycle Challenge
 
 **Estimated Time:** 4–8 hours
@@ -186,48 +185,3 @@ You have 4 business days from the moment you submit this form to complete and su
 This portal ensures your work is tracked correctly and routed to the hiring team for evaluation."
 
 This gives us access to CI history, secrets, and workflow configurations for review.
-=======
-# tv-devops-assessment — Quick deploy snippet
-
-## Deploy to AWS (ECR + CDKTF)
-
-Prerequisites: AWS credentials configured (env or profile), `AWS_REGION` set, and `APP_NAME` chosen.
-
-1) Build, create ECR repo, tag & push image (run from repository root):
-
-```bash
-export AWS_REGION=us-east-1
-export APP_NAME=my-express-app
-
-docker build -t ${APP_NAME}:latest ./app
-ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
-ECR_URI=${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${APP_NAME}
-
-# create repo if missing
-aws ecr describe-repositories --repository-names "${APP_NAME}" --region ${AWS_REGION} || \
-  aws ecr create-repository --repository-name "${APP_NAME}" --region ${AWS_REGION}
-
-aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
-
-docker tag ${APP_NAME}:latest ${ECR_URI}:latest
-docker push ${ECR_URI}:latest
-
-# export image uri for deployment
-export IMAGE_URI=${ECR_URI}:latest
-```
-
-2) Install CDKTF deps, synth and deploy (from `iac/`):
-
-```bash
-cd iac
-npm install
-npm run synth
-npm run deploy -- --auto-approve
-# or: cdktf deploy --auto-approve
-```
-
-Notes:
-- Ensure `IMAGE_URI` is exported in the environment before running `cdktf deploy` so ECS can pull the image.
-- After deploy, check Terraform outputs for the ALB DNS and visit `http://<alb-dns>/health`.
-
->>>>>>> 7f762e1 (Initial commit)
